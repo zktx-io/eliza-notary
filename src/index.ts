@@ -44,6 +44,30 @@ const readFilesFromDirectory = (
   return code;
 };
 
+const getModelFromTriggerComment = (): ModelProviderName | undefined => {
+  const commentBody = github.context.payload.comment?.body;
+
+  if (!commentBody) {
+    elizaLogger.error('Trigger comment not found.');
+    return undefined;
+  }
+
+  const match = commentBody
+    .trim()
+    .toLowerCase()
+    .match(/eliza audit model=(openai|deepseek)/i);
+  const model = match ? (match[1] as ModelProviderName) : null;
+
+  return model === 'openai' || model === 'deepseek' ? model : undefined;
+};
+
+const getAgentWithModel = (
+  agent: Character,
+  model?: ModelProviderName,
+): Character => {
+  return { ...agent, modelProvider: model ?? agent.modelProvider };
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const postComment = async (octokit: any, comment: string) => {
   try {
@@ -115,16 +139,21 @@ const startAgents = async () => {
 
     if (projectPath && process.env.GITHUB_TOKEN) {
       const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+      const model = getModelFromTriggerComment();
       if (actionType === 'audit') {
         if (characterArg) {
           const temp = await loadCharacters(characterArg);
           await loadAndStartAgents(
-            temp.length > 0 ? temp : [SAM],
+            temp.length > 0 ? temp : [getAgentWithModel(SAM, model)],
             directClient,
             sqlitePath,
           );
         } else {
-          await loadAndStartAgents([SAM], directClient, sqlitePath);
+          await loadAndStartAgents(
+            [getAgentWithModel(SAM, model)],
+            directClient,
+            sqlitePath,
+          );
         }
 
         try {
@@ -147,7 +176,7 @@ const startAgents = async () => {
         } catch (error) {
           elizaLogger.error('Error processing audit:', error);
         }
-      } else if (actionType === 'comment') {
+      } else if (actionType === 'summary') {
         const context = github.context;
 
         const issueComments = await octokit.rest.issues.listComments({
@@ -158,7 +187,11 @@ const startAgents = async () => {
           .map((comment) => `${comment.user?.login}: ${comment.body}`)
           .join('\n\n');
         if (commentBody) {
-          await loadAndStartAgents([ICM], directClient, sqlitePath);
+          await loadAndStartAgents(
+            [getAgentWithModel(ICM, model)],
+            directClient,
+            sqlitePath,
+          );
           /*
           const codes = readFilesFromDirectory(projectPath, ['.move']);
           const commentResponse = await directClient.comment(
