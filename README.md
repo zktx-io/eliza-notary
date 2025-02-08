@@ -7,9 +7,9 @@ However, the impact of AI in this domain goes beyond just improving development 
 
 To address this issue, **SLSA (Supply chain Levels for Software Artifacts)** provides a transparent verification framework, playing a key role in ensuring consistency between deployed and original code. Based on SLSA principles, **Eliza Notary** conducts all audits publicly on GitHub and transparently discloses details such as the AI prompts used. This level of openness allows anyone to verify every step of the auditing process, significantly enhancing trust in the entire pipeline.
 
-Additionally, **Eliza Notary** rigorously inspects open-source code before deployment using AI, enabling the early detection and mitigation of potential vulnerabilities or errors. This proactive auditing process goes beyond simple verification; it contributes to the overall quality and security of software while establishing a trustworthy open-source provenance and deployment pipeline.
+Additionally, **Eliza Notary rigorously inspects open-source code before deployment using AI**, enabling the early detection and mitigation of potential vulnerabilities or errors. This proactive auditing process goes beyond simple verification; it contributes to the overall quality and security of software while establishing a **trustworthy open-source provenance and deployment pipeline**.
 
-Ultimately, by combining AI-powered innovations with the SLSA transparent verification framework, **Eliza Notary** becomes an indispensable tool for ensuring the security and trustworthiness of smart contracts and other critical systems. This comprehensive approach provides developers with a robust mechanism to prove the authenticity of their code, strengthening the quality and security of the entire open-source ecosystem.
+Ultimately, by combining AI-powered innovations with **the SLSA transparent verification framework**, **Eliza Notary** becomes an indispensable tool for ensuring the **security and trustworthiness of smart contracts** and other critical systems. This comprehensive approach provides developers with a robust mechanism to prove the authenticity of their code, strengthening the quality and security of the entire open-source ecosystem.
 
 ## Expected Effects and Use Cases
 + Enhanced Transparency and Reliability:
