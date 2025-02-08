@@ -25,28 +25,61 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Detect Command Type
+      shell: bash
+      run: |
+        if [[ "${{ github.event.comment.body }}" == *"/eliza help"* ]]; then
+          echo "ACTION_TYPE=help" >> $GITHUB_ENV
+        elif [[ "${{ github.event.comment.body }}" == *"/eliza audit"* ]]; then
+          echo "ACTION_TYPE=audit" >> $GITHUB_ENV
+        elif [[ "${{ github.event.comment.body }}" == *"/eliza summary"* ]]; then
+          echo "ACTION_TYPE=summary" >> $GITHUB_ENV
+        fi
+
+    - name: Post help message as comment on issue
+      if: env.ACTION_TYPE == 'help'
+      uses: actions/github-script@v6
+      env:
+        GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+      with:
+        script: |
+          const commentBody = `
+          \`\`\`
+          Usage: /eliza [command] [options]
+
+          Commands:
+            /eliza help              Display available commands and their descriptions.
+            /eliza audit model=[openai|deepseek]
+                                     Perform an audit of the repository's code.
+                                     The 'model' option must be either 'openai' or 'deepseek'.
+            /eliza summary model=[option]
+                                     Summarize the issue content using AI.
+                                     The 'model' option allows you to choose an AI model for summarization.
+          \`\`\`
+          `;
+          
+          const issueNumber = context.payload.issue ? context.payload.issue.number : context.payload.pull_request.number;
+          await github.rest.issues.createComment({
+            ...context.repo,
+            issue_number: issueNumber,
+            body: commentBody
+          });
+
+    - name: Stop workflow if help command was executed
+      if: env.ACTION_TYPE == 'help'
+      shell: bash
+      run: exit 0
+
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '22'
+
     - name: Checkout another repository
       uses: actions/checkout@v4
       with:
         repository: zktx-io/slsa-on-sui-test
         path: ./external-repo
-
-    - name: Set ACTION_TYPE to comment
-      if: |
-        contains(github.event.comment.body, '/eliza') &&
-        github.event.comment.user.login != 'github-actions[bot]'
-      shell: bash
-      run: |
-        echo "ACTION_TYPE=comment" >> $GITHUB_ENV
-
-    - name: Set ACTION_TYPE to audit
-      if: contains(github.event.comment.body, '/eliza audit')
-      shell: bash
-      run: echo "ACTION_TYPE=audit" >> $GITHUB_ENV
 
     - name: Set up Homebrew
       if: env.ACTION_TYPE == 'audit'
@@ -67,13 +100,8 @@ runs:
         set -e
         cat test_results.txt
 
-    - name: Set ACTION_TYPE to audit
-      if: contains(github.event.comment.body, '/eliza audit')
-      shell: bash
-      run: echo "ACTION_TYPE=audit" >> $GITHUB_ENV
-
     - name: Install and Build Project
-      if: env.ACTION_TYPE != ''
+      if: env.ACTION_TYPE == 'audit' || env.ACTION_TYPE == 'summary' 
       shell: bash
       working-directory: ./external-repo
       env:
