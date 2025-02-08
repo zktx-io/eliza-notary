@@ -3,6 +3,7 @@ import path from 'path';
 
 import {
   Character,
+  elizaLogger,
   ModelProviderName,
   validateCharacterConfig,
 } from '@elizaos/core';
@@ -27,7 +28,7 @@ export async function loadCharacters(
 
         loadedCharacters.push(character);
       } catch (e) {
-        console.error(`Error loading character from ${filePath}: ${e}`);
+        elizaLogger.error(`Error loading character from ${filePath}: ${e}`);
         // Continue loading other characters even if one fails
       }
     }
