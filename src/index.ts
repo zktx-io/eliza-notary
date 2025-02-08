@@ -4,7 +4,11 @@ import path from 'path';
 import * as github from '@actions/github';
 import { Character, elizaLogger, ModelProviderName } from '@elizaos/core';
 
-import { ICM, LAM, SAM } from './eliza/character.js';
+import {
+  getIssueCommentMaster,
+  getLearningAuditMaster,
+  getSecureAuditMaster,
+} from './eliza/character.js';
 import DirectClientCLI from './eliza/directClientCLI.js';
 import { downloadAsset } from './eliza/downloadAsset.js';
 import { startAgent } from './eliza/index.js';
@@ -59,13 +63,6 @@ const getModelFromTriggerComment = (): ModelProviderName | undefined => {
   const model = match ? (match[1] as ModelProviderName) : null;
 
   return model === 'openai' || model === 'deepseek' ? model : undefined;
-};
-
-const getAgentWithModel = (
-  agent: Character,
-  model?: ModelProviderName,
-): Character => {
-  return { ...agent, modelProvider: model ?? agent.modelProvider };
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -144,13 +141,13 @@ const startAgents = async () => {
         if (characterArg) {
           const temp = await loadCharacters(characterArg);
           await loadAndStartAgents(
-            temp.length > 0 ? temp : [getAgentWithModel(SAM, model)],
+            temp.length > 0 ? temp : [getSecureAuditMaster(model)],
             directClient,
             sqlitePath,
           );
         } else {
           await loadAndStartAgents(
-            [getAgentWithModel(SAM, model)],
+            [getSecureAuditMaster(model)],
             directClient,
             sqlitePath,
           );
@@ -188,7 +185,7 @@ const startAgents = async () => {
           .join('\n\n');
         if (commentBody) {
           await loadAndStartAgents(
-            [getAgentWithModel(ICM, model)],
+            [getIssueCommentMaster(model)],
             directClient,
             sqlitePath,
           );
@@ -214,7 +211,7 @@ const startAgents = async () => {
     } else {
       const mode = process.env.MODE;
       if (mode === 'release') {
-        await loadAndStartAgents([LAM], directClient, './');
+        await loadAndStartAgents([getLearningAuditMaster()], directClient, './');
       } else {
         elizaLogger.error('Project path not found');
       }
