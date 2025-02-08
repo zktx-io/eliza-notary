@@ -1,10 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 
-import { Character, validateCharacterConfig } from '@elizaos/core';
+import {
+  Character,
+  ModelProviderName,
+  validateCharacterConfig,
+} from '@elizaos/core';
 
 export async function loadCharacters(
   charactersArg: string,
+  modelProvider: ModelProviderName = ModelProviderName.OPENAI,
 ): Promise<Character[]> {
   const characterPaths = charactersArg?.split(',').map((filePath) => {
     return path.resolve(process.cwd(), filePath.trim());
@@ -16,7 +21,7 @@ export async function loadCharacters(
     for (const filePath of characterPaths) {
       try {
         const characterData = await fs.promises.readFile(filePath, 'utf8');
-        const character = JSON.parse(characterData);
+        const character = { ...JSON.parse(characterData), modelProvider };
 
         validateCharacterConfig(character);
 
