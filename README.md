@@ -1,6 +1,10 @@
 # Eliza Notary
 
-### 🚀 How AI is Revolutionizing Smart Contract Auditing & On-Chain Provenance with Eliza Notary
+## Overview
+
+**Eliza Notary** is an AI-driven solution that automatically audits smart contract code and identifies security vulnerabilities, while transparently verifying consistency between deployed code and open-source repositories using the **SLSA framework**.
+
+### 🚀 AI Innovation: The Future of Smart Contract Auditing & On-Chain Provenance
 
 In recent years, artificial intelligence has made remarkable advancements, fundamentally transforming how developers ensure code quality and security. The latest AI agents can automatically audit code, detect vulnerabilities, and generate insightful summaries in real time. By leveraging cutting-edge AI models, teams can significantly accelerate the review process and enhance the overall quality of their software.
 
