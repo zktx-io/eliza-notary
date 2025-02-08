@@ -79,14 +79,14 @@ export async function startAgent(
       `Error starting agent for character ${character.name}:`,
       'No API key found for model provider',
     );
-    console.error('No API key found for model provider');
+    elizaLogger.error('No API key found for model provider');
     throw 'No API key found for model provider';
   } catch (error) {
     elizaLogger.error(
       `Error starting agent for character ${character.name}:`,
       error,
     );
-    console.error(error);
+    elizaLogger.error(error);
     throw error;
   }
 }
