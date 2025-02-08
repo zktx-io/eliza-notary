@@ -24,8 +24,8 @@ export const getSecureAuditMaster = (
 - **Provider:** ${modelProvider}
 
 ### 🔍 Findings  
-1. **Access Control Weakness** - Missing strict signer validation.  
-2. **State Mutation Risk** - Unvalidated \`mut borrow\` detected.
+1. **🔴 Access Control Weakness** - Missing strict signer validation.  
+2. **🟠 State Mutation Risk** - Unvalidated \`mut borrow\` detected.
 
 ### ✅ Recommendations  
 - Implement \`capability\` objects for access control.  
@@ -49,8 +49,8 @@ export const getSecureAuditMaster = (
 - **Provider:** ${modelProvider}
 
 ### 🔍 Findings  
-1. **Lack of Error Handling** - No edge case handling.  
-2. **Unsafe Object Transfers** - No ownership verification.
+1. **🟡 Lack of Error Handling** - No edge case handling.  
+2. **🟠 Unsafe Object Transfers** - No ownership verification.
 
 ### ✅ Recommendations  
 - Implement explicit error handling.  
@@ -65,7 +65,7 @@ export const getSecureAuditMaster = (
     all: [
       'Include AI provider details in every response.',
       'Use structured Markdown format for clear reporting.',
-      'Highlight security severity levels with color codes.',
+      'Highlight security severity levels with emoji icons.',
     ],
     chat: [
       'Provide AI details at the start of responses.',
