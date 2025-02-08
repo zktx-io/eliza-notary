@@ -1,0 +1,87 @@
+name: Secure Audit Master
+description: Secure Audit Master is a GitHub Action that harnesses community-driven insights to detect vulnerabilities in smart contracts. It automatically audits code changes and generates a detailed report.
+branding:
+  color: blue
+  icon: shield
+
+permissions:
+  issues: write
+  contents: read
+
+inputs:
+  project-path:
+    description: 'Path to the project'
+    required: true
+  report-path:
+    description: 'Path to save the audit report'
+    required: true
+  sqlite-path:
+    description: 'Path to the SQLite database (db.sqlite)'
+    required: false
+  character-path:
+    description: 'Path to the character files (character.json)'
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+    - name: Checkout another repository
+      uses: actions/checkout@v4
+      with:
+        repository: zktx-io/slsa-on-sui-test
+        path: ./external-repo
+
+    - name: Set ACTION_TYPE to comment
+      if: |
+        contains(github.event.comment.body, '/eliza') &&
+        github.event.comment.user.login != 'github-actions[bot]'
+      shell: bash
+      run: |
+        echo "ACTION_TYPE=comment" >> $GITHUB_ENV
+
+    - name: Set ACTION_TYPE to audit
+      if: contains(github.event.comment.body, '/eliza audit')
+      shell: bash
+      run: echo "ACTION_TYPE=audit" >> $GITHUB_ENV
+
+    - name: Set up Homebrew
+      if: env.ACTION_TYPE == 'audit'
+      uses: Homebrew/actions/setup-homebrew@master
+
+    - name: Install Sui
+      if: env.ACTION_TYPE == 'audit'
+      shell: bash
+      run: brew install sui
+
+    - name: Run Sui Move Test
+      if: env.ACTION_TYPE == 'audit'
+      shell: bash
+      working-directory: ${{ inputs.project-path }}
+      run: |
+        set +e
+        sui move test > test_results.txt 2>&1
+        set -e
+        cat test_results.txt
+
+    - name: Set ACTION_TYPE to audit
+      if: contains(github.event.comment.body, '/eliza audit')
+      shell: bash
+      run: echo "ACTION_TYPE=audit" >> $GITHUB_ENV
+
+    - name: Install and Build Project
+      if: env.ACTION_TYPE != ''
+      shell: bash
+      working-directory: ./external-repo
+      env:
+        PROJECT_PATH: ${{ inputs.project-path }}
+        REPORT_PATH: ${{ inputs.report-path }}
+        SQLITE_PATH: ${{ inputs.sqlite-path }}
+        CHARACTER_PATH: ${{ inputs.character-path }}
+      run: |
+        npm install
+        npm run build
+        node dist/index.js
