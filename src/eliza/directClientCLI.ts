@@ -1,5 +1,6 @@
 import fs from 'fs';
 
+// import { DefaultArtifactClient } from '@actions/artifact';
 import {
   AgentRuntime,
   elizaLogger,
@@ -11,6 +12,33 @@ import {
   type Content,
   type Memory,
 } from '@elizaos/core';
+
+async function uploadArtifactWithContent(
+  projectPath: string,
+  fileName: string,
+  content: string,
+) {
+  try {
+    fs.writeFileSync(`${projectPath}/${fileName}`, content, 'utf8');
+    /*
+    const artifactClient = new DefaultArtifactClient();
+    const artifactName = 'audit-report';
+    const files = [fileName];
+    const rootDirectory = projectPath;
+    const uploadResult = await artifactClient.uploadArtifact(
+      artifactName,
+      files,
+      rootDirectory,
+      {
+        retentionDays: 10,
+      },
+    );
+    elizaLogger.log('Artifact upload result:', uploadResult);
+    */
+  } catch (error) {
+    elizaLogger.error('Error uploading artifact:', error);
+  }
+}
 
 class DirectClientCLI {
   private agents: Map<string, AgentRuntime>;
@@ -33,7 +61,7 @@ class DirectClientCLI {
 
     const runtime = this.agents.get(agentId);
     if (!runtime) {
-      console.log('Agent not found.');
+      elizaLogger.error('Agent not found.');
       return;
     }
 
@@ -41,7 +69,7 @@ class DirectClientCLI {
       const response = await this.processMessage(runtime, comment);
       return response.text;
     } catch (error) {
-      console.error('Error processing message:', error);
+      elizaLogger.error('Error processing message:', error);
     }
     return;
   }
@@ -51,7 +79,7 @@ class DirectClientCLI {
 
     const runtime = this.agents.get(agentId);
     if (!runtime) {
-      console.log('Agent not found.');
+      elizaLogger.error('Agent not found.');
       return;
     }
 
@@ -73,6 +101,7 @@ class DirectClientCLI {
       */
       const response = await this.processMessage(runtime, codes.join('\n\n'));
       reports.push(response.text);
+      /*
       const currentTime = new Date()
         .toISOString()
         .split('.')[0]
@@ -81,9 +110,10 @@ class DirectClientCLI {
         `${reportPath}/report-${currentTime}.md`,
         response.text,
       );
-      fs.appendFileSync(`${projectPath}/report.md`, response.text);
+      */
+      uploadArtifactWithContent(projectPath, 'report.md', response.text);
     } catch (error) {
-      console.error('Error processing message:', error);
+      elizaLogger.error('Error processing message:', error);
     }
     return reports;
   }
