@@ -113,3 +113,9 @@ runs:
         npm install
         npm run build
         node dist/index.js
+
+    - name: Upload Report Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: audit-report
+        path: "${{ inputs.project-path }}/report.md"
