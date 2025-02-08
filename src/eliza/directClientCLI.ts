@@ -1,4 +1,4 @@
-// import fs from 'fs';
+import fs from 'fs';
 
 import {
   AgentRuntime,
@@ -46,7 +46,7 @@ class DirectClientCLI {
     return;
   }
 
-  public async audit(reportPath: string, codes: string[]) {
+  public async audit(reportPath: string, projectPath: string, codes: string[]) {
     const agentId = [...this.agents.keys()][0];
 
     const runtime = this.agents.get(agentId);
@@ -73,14 +73,15 @@ class DirectClientCLI {
       */
       const response = await this.processMessage(runtime, codes.join('\n\n'));
       reports.push(response.text);
-      /*
       const currentTime = new Date()
         .toISOString()
         .split('.')[0]
         .replace(/[:]/g, '-');
-      const reportFileName = `${reportPath}/report-${currentTime}.md`;
-      fs.appendFileSync(reportFileName, response.text);
-      */
+      fs.appendFileSync(
+        `${reportPath}/report-${currentTime}.md`,
+        response.text,
+      );
+      fs.appendFileSync(`${projectPath}/report.md`, response.text);
     } catch (error) {
       console.error('Error processing message:', error);
     }
