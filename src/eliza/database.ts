@@ -5,6 +5,7 @@ import {
   CacheManager,
   Character,
   DbCacheAdapter,
+  elizaLogger,
   IDatabaseCacheAdapter,
 } from '@elizaos/core';
 import Database from 'better-sqlite3';
@@ -15,7 +16,7 @@ export function initializeDatabase(dataDir: string): SqliteDatabaseAdapter {
     const db = new SqliteDatabaseAdapter(new Database(filePath));
     return db;
   } catch (error) {
-    console.error('Error initializing database:', error);
+    elizaLogger.error('Error initializing database:', error);
     throw error;
   }
 }
@@ -28,7 +29,7 @@ export function initializeDbCache(
     const cache = new CacheManager(new DbCacheAdapter(db, character.id!));
     return cache;
   } catch (error) {
-    console.error('Error initializing database cache:', error);
+    elizaLogger.error('Error initializing database cache:', error);
     throw error;
   }
 }
