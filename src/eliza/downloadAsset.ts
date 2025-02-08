@@ -1,6 +1,7 @@
 import fs from 'fs';
 
 import * as github from '@actions/github';
+import { elizaLogger } from '@elizaos/core';
 import fetch from 'node-fetch';
 
 const getLatestReleaseAssetUrl = async (
@@ -52,6 +53,6 @@ export const downloadAsset = async (
     );
     await downloadFile(assetUrl, outputPath);
   } catch (error) {
-    console.log(error);
+    elizaLogger.log(error);
   }
 };
