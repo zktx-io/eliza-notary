@@ -1,5 +1,5 @@
-name: Secure Audit Master
-description: Secure Audit Master is a GitHub Action that harnesses community-driven insights to detect vulnerabilities in smart contracts. It automatically audits code changes and generates a detailed report.
+name: Eliza Notary
+description: Eliza Notary is a GitHub Action that harnesses community-driven insights to detect vulnerabilities in smart contracts. It automatically audits code changes and generates a detailed report.
 branding:
   color: blue
   icon: shield
