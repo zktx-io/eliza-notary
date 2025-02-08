@@ -139,7 +139,7 @@ const startAgents = async () => {
       const model = getModelFromTriggerComment();
       if (actionType === 'audit') {
         if (characterArg) {
-          const temp = await loadCharacters(characterArg);
+          const temp = await loadCharacters(characterArg, model);
           await loadAndStartAgents(
             temp.length > 0 ? temp : [getSecureAuditMaster(model)],
             directClient,
@@ -160,7 +160,7 @@ const startAgents = async () => {
           const codes = readFilesFromDirectory(`${projectPath}/sources`, [
             '.move',
           ]);
-          const report = await directClient.audit(reportPath, [
+          const report = await directClient.audit(reportPath, projectPath, [
             ...codes,
             testResults,
           ]);
@@ -211,7 +211,11 @@ const startAgents = async () => {
     } else {
       const mode = process.env.MODE;
       if (mode === 'release') {
-        await loadAndStartAgents([getLearningAuditMaster()], directClient, './');
+        await loadAndStartAgents(
+          [getLearningAuditMaster()],
+          directClient,
+          './',
+        );
       } else {
         elizaLogger.error('Project path not found');
       }
