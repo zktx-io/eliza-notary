@@ -105,7 +105,7 @@ runs:
         cat test_results.txt
 
     - name: Install and Build Project
-      if: env.ACTION_TYPE == 'audit' || env.ACTION_TYPE == 'summary' 
+      if: env.ACTION_TYPE == 'audit' || env.ACTION_TYPE == 'summary'
       shell: bash
       working-directory: ./external-repo
       env:
@@ -123,3 +123,9 @@ runs:
       with:
         name: audit-report
         path: "${{ inputs.project-path }}/report.md"
+
+    - name: Upload Report as Release Asset
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v2.0.8
+      with:
+        files: "${{ inputs.project-path }}/report.md"
