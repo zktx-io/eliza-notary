@@ -79,8 +79,22 @@ jobs:
       contents: read
 
     steps:
+      - name: Determine branch
+        id: determine_branch
+        run: |
+          if [[ -n "${{ github.event.issue.pull_request }}" ]]; then
+            echo "Running on PR..."
+            PR_NUMBER=${{ github.event.issue.number }}
+            echo "BRANCH=refs/pull/${PR_NUMBER}/head" >> $GITHUB_ENV
+          else
+            echo "Running on issue..."
+            echo "BRANCH=main" >> $GITHUB_ENV
+          fi
+
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH }}
 
       - name: Run Eliza Notary
         uses: zktx-io/eliza-notary@main
@@ -142,3 +156,7 @@ Commands:
 - Expected Outcome:
   - Provides a quick overview of extensive issue discussions, greatly enhancing collaborative efficiency.
   - Helps team members rapidly identify the core discussion points, thereby facilitating faster decision-making and problem resolution.
+
+## Github
+
+- Get started with **Eliza Notary Example** and learn by [github](https://github.com/zktx-io/eliza-notary-example)
