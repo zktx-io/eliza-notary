@@ -58,6 +58,8 @@ Action Inputs:
   The path to the project to be audited (e.g., ./my_project).
 - **character-path (optional)**:
   The path to the character configuration file for the AI agent (used for custom character settings).
+- **force-audit (optional)**:
+  Enables forced execution of the AI audit process, ensuring that an audit report is always generated regardless of user commands.
 
 ### Example Workflow File
 
