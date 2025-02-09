@@ -21,6 +21,10 @@ inputs:
   character-path:
     description: 'Path to the character files (character.json)'
     required: false
+  force-audit:
+    description: 'Force audit execution (true/false)'
+    required: false
+    default: 'false'
 
 runs:
   using: 'composite'
@@ -28,7 +32,9 @@ runs:
     - name: Detect Command Type
       shell: bash
       run: |
-        if [[ "${{ github.event.comment.body }}" == *"/eliza help"* ]]; then
+        if [[ "${{ inputs.force-audit }}" == "true" ]]; then
+          echo "ACTION_TYPE=audit" >> $GITHUB_ENV
+        elif [[ "${{ github.event.comment.body }}" == *"/eliza help"* ]]; then
           echo "ACTION_TYPE=help" >> $GITHUB_ENV
         elif [[ "${{ github.event.comment.body }}" == *"/eliza audit"* ]]; then
           echo "ACTION_TYPE=audit" >> $GITHUB_ENV
@@ -39,8 +45,6 @@ runs:
     - name: Post help message as comment on issue
       if: env.ACTION_TYPE == 'help'
       uses: actions/github-script@v6
-      env:
-        GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
       with:
         script: |
           const commentBody = `
