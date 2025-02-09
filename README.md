@@ -159,4 +159,5 @@ Commands:
 
 ## Github
 
+- Get started with **SLSA on Sui** and learn by [github](https://github.com/zktx-io/slsa-on-sui)
 - Get started with **Eliza Notary Example** and learn by [github](https://github.com/zktx-io/eliza-notary-example)
