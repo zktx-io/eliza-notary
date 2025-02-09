@@ -4,6 +4,8 @@
 
 **Eliza Notary** is an AI-driven solution that automatically audits smart contract code and identifies security vulnerabilities, while transparently verifying consistency between deployed code and open-source repositories using the **SLSA framework**.
 
+![Eliza Notary](https://docs.zktx.io/images/eliza-notary.png)
+
 ### 🚀 AI Innovation: The Future of Smart Contract Auditing & On-Chain Provenance
 
 In recent years, artificial intelligence has made remarkable advancements, fundamentally transforming how developers ensure code quality and security. The latest AI agents can automatically audit code, detect vulnerabilities, and generate insightful summaries in real time. By leveraging cutting-edge AI models, teams can significantly accelerate the review process and enhance the overall quality of their software.
@@ -59,7 +61,7 @@ Action Inputs:
 
 Below is an example of how to include the Secure Audit Master action in your workflow file:
 
-```
+```yml
 name: Comment Triggered Workflow
 
 on:
@@ -101,7 +103,7 @@ The Secure Audit Master action is designed to be triggered by comments on issues
   - The action will automatically reply with a help message that outlines all available commands, including their descriptions and usage instructions.
 - Example Output:
 
-```
+```bash
 Usage: /eliza [command] [options]
 
 Commands:
