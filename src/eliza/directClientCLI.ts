@@ -20,7 +20,7 @@ async function uploadArtifactWithContent(
 ) {
   try {
     fs.writeFileSync(`${projectPath}/${fileName}`, content, 'utf8');
-    elizaLogger.log(`${projectPath}/${fileName}`);
+    console.log(`${projectPath}/${fileName}`);
     /*
     const artifactClient = new DefaultArtifactClient();
     const artifactName = 'audit-report';
