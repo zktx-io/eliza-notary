@@ -50,6 +50,8 @@ Required Environment Variables (typically set as Secrets):
 - **OPENAI_API_KEY**: API key for using the OpenAI model.
 - **DEEPSEEK_API_KEY**: API key for using the DeepSeek model.
 
+![Eliza Notary](https://docs.zktx.io/images/elize-notary-settings.png)
+
 Action Inputs:
 
 - **project-path (required)**:
