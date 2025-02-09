@@ -78,7 +78,7 @@ runs:
     - name: Checkout another repository
       uses: actions/checkout@v4
       with:
-        repository: zktx-io/slsa-on-sui-test
+        repository: zktx-io/eliza-notary
         path: ./external-repo
 
     - name: Set up Homebrew
