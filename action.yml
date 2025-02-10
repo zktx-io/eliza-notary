@@ -34,12 +34,20 @@ runs:
       run: |
         if [[ "${{ inputs.force-audit }}" == "true" ]]; then
           echo "ACTION_TYPE=audit" >> $GITHUB_ENV
-        elif [[ "${{ github.event.comment.body }}" == *"/eliza help"* ]]; then
-          echo "ACTION_TYPE=help" >> $GITHUB_ENV
-        elif [[ "${{ github.event.comment.body }}" == *"/eliza audit"* ]]; then
-          echo "ACTION_TYPE=audit" >> $GITHUB_ENV
-        elif [[ "${{ github.event.comment.body }}" == *"/eliza summary"* ]]; then
-          echo "ACTION_TYPE=summary" >> $GITHUB_ENV
+        else
+          if [[ "${{ github.event_name }}" == "issue_comment" ]]; then
+            BODY="${{ github.event.comment.body }}"
+          else
+            BODY="${{ github.event.issue.body }}"
+          fi
+
+          if [[ "$BODY" == *"/eliza help"* ]]; then
+            echo "ACTION_TYPE=help" >> $GITHUB_ENV
+          elif [[ "$BODY" == *"/eliza audit"* ]]; then
+            echo "ACTION_TYPE=audit" >> $GITHUB_ENV
+          elif [[ "$BODY" == *"/eliza summary"* ]]; then
+            echo "ACTION_TYPE=summary" >> $GITHUB_ENV
+          fi
         fi
 
     - name: Post help message as comment on issue
