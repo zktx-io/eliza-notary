@@ -4,9 +4,7 @@
 
 **Eliza Notary** is an AI-driven solution that automatically audits smart contract code and identifies security vulnerabilities, while transparently verifying consistency between deployed code and open-source repositories using the **SLSA framework**.
 
-<video width="1280" height="720" controls>
-    <source src="https://docs.zktx.io/movie/eliza-notary.mp4" type="video/mp4">
-</video>
+https://docs.zktx.io/movie/eliza-notary.mp4
 
 ### 🚀 AI Innovation: The Future of Smart Contract Auditing & On-Chain Provenance
 
