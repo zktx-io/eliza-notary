@@ -4,7 +4,9 @@
 
 **Eliza Notary** is an AI-driven solution that automatically audits smart contract code and identifies security vulnerabilities, while transparently verifying consistency between deployed code and open-source repositories using the **SLSA framework**.
 
-![Eliza Notary](https://docs.zktx.io/images/eliza-notary.png)
+<video width="1280" height="720" controls>
+    <source src="https://docs.zktx.io/movie/eliza-notary.mp4" type="video/mp4">
+</video>
 
 ### 🚀 AI Innovation: The Future of Smart Contract Auditing & On-Chain Provenance
 
@@ -50,7 +52,7 @@ Required Environment Variables (typically set as Secrets):
 - **OPENAI_API_KEY**: API key for using the OpenAI model.
 - **DEEPSEEK_API_KEY**: API key for using the DeepSeek model.
 
-![Eliza Notary](https://docs.zktx.io/images/elize-notary-settings.png)
+![setting](https://docs.zktx.io/images/elize-notary-settings.png)
 
 Action Inputs:
 
